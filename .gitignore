@@ -1,0 +1,14 @@
+# Jekyll 生成的本地文件
+_site/
+.sass-cache/
+.jekyll-cache/
+.jekyll-metadata
+
+# Ruby / Bundler
+Gemfile.lock
+
+# 系统/编辑器
+.DS_Store
+Thumbs.db
+*.swp
+.vscode/

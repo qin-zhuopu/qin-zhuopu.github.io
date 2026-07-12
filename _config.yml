@@ -1,0 +1,26 @@
+# 站点设置
+title: qin-zhuopu
+description: >-  # 站点简介，会显示在浏览器标签和首页
+  个人博客 —— 记录学习与思考。
+github_username: qin-zhuopu
+
+# 主题（GitHub Pages 内置支持，开箱即用）
+theme: minima
+
+# 文章 URL 格式
+permalink: /:year/:month/:day/:title/
+
+# Markdown 设置
+markdown: kramdown
+
+# 文章列表分页
+plugins:
+  - jekyll-feed
+  - jekyll-seo-tag
+
+# 排除不要编译的文件
+exclude:
+  - README.md
+  - Gemfile
+  - Gemfile.lock
+  - .gitignore
