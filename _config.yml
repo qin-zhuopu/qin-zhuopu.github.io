@@ -7,6 +7,11 @@ github_username: qin-zhuopu
 # 主题（GitHub Pages 内置支持，开箱即用）
 theme: minima
 
+# 顶部导航栏的页面链接（minima 读 header_pages）
+header_pages:
+  - categories.md
+  - about.md
+
 # 文章 URL 格式
 permalink: /:year/:month/:day/:title/
 

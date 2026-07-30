@@ -2,7 +2,8 @@
 layout: post
 title: "在 macOS Big Sur 上给 RTL8188GU USB 网卡装驱动：一次完整的折腾记录"
 date: 2026-07-31 06:30:00 +0800
-categories: 折腾
+categories: macOS
+series: big-sur-series
 ---
 
 最近翻出一颗旧的 USB 无线网卡想接到老 Mac 上用，结果一路踩坑到天黑。把全过程写下来，免得下次再踩。

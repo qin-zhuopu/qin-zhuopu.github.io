@@ -2,7 +2,8 @@
 layout: post
 title: "macOS Big Sur 的 User-Approved Kernel Extensions：装第三方 kext 必须经的流程"
 date: 2026-07-31 07:00:00 +0800
-categories: 折腾
+categories: macOS
+series: big-sur-series
 ---
 
 上一篇写了在 Big Sur 上给 Realtek USB 网卡装驱动的过程，里面提到一个关键步骤——**User-Approved Kernel Extensions**（用户批准的内核扩展）。这篇把它单独拎出来写清楚，因为这个机制是 Big Sur 上装任何第三方 kext 都会撞上的。

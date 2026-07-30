@@ -3,6 +3,7 @@ layout: post
 title: "GitHub CLI 在 macOS Big Sur 上装不了？装个旧版本就行"
 date: 2026-07-31 07:30:00 +0800
 categories: 工具
+series: big-sur-series
 ---
 
 写上一篇文章的时候需要用 GitHub CLI（`gh` 命令）查自己的仓库列表，结果发现新版 gh 装不了。把解决过程记一下，省得下次再踩。

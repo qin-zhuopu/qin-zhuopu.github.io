@@ -2,7 +2,8 @@
 layout: post
 title: "同一个设备两套名字：海尔空调 WS 实体名 vs Polled 实体名不一致的问题"
 date: 2026-07-31 12:00:00 +0800
-categories: 折腾
+categories: Home-Assistant
+series: haier-series
 ---
 
 给 banto6/haier 加完 polling 之后，我撞上了一个看起来莫名其妙的问题：

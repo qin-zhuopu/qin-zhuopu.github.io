@@ -2,7 +2,8 @@
 layout: post
 title: "Home Assistant 实体的「数据库行数」≠「事件次数」：以海尔 WebSocket 为例"
 date: 2026-07-31 11:00:00 +0800
-categories: 折腾
+categories: Home-Assistant
+series: haier-series
 ---
 
 接入海尔空调之后，我看数据库里 `climate.bei_wo_shi_kong_diao_climate` 这一个实体就有 17 行 WS 推送记录，差点以为云端每分钟都在推。深入分析之后才发现：

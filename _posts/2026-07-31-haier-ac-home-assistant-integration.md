@@ -2,7 +2,8 @@
 layout: post
 title: "把海尔空调接入 Home Assistant：抓 token、读源码、加轮询的完整折腾记录"
 date: 2026-07-31 09:00:00 +0800
-categories: 折腾
+categories: Home-Assistant
+series: haier-series
 ---
 
 最近想把家里的海尔空调接入 Home Assistant（下面简称 HA），主要不是为了远程控制——海尔智家 App 已经能做——而是为了**长期记录室温、湿度，未来配合自动化做"室温超过 28 度自动开空调"**。

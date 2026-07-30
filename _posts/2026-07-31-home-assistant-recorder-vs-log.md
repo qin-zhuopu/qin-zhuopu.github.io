@@ -2,7 +2,8 @@
 layout: post
 title: "Home Assistant 的两个存储：数据库只记变化，日志每次都记"
 date: 2026-07-31 10:30:00 +0800
-categories: 折腾
+categories: Home-Assistant
+series: haier-series
 ---
 
 接入海尔空调之后遇到一个看起来很奇怪的现象：

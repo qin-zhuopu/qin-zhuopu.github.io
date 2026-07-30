@@ -2,7 +2,8 @@
 layout: post
 title: "给 Home Assistant 集成加定时任务踩的三个 asyncio 坑"
 date: 2026-07-31 10:00:00 +0800
-categories: 折腾
+categories: Home-Assistant
+series: haier-series
 ---
 
 上一篇写了怎么把海尔空调接入 HA，里面提到加 60 秒轮询踩了三个 asyncio 坑。这篇单独把它写出来——因为这三个坑太典型了，**任何给 HA 写定时回调的集成都可能撞上**。

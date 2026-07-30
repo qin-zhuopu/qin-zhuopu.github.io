@@ -2,7 +2,8 @@
 layout: post
 title: "海尔智家云的两套 token，以及为什么手机抓不到 refresh_token"
 date: 2026-07-31 11:30:00 +0800
-categories: 折腾
+categories: Home-Assistant
+series: haier-series
 ---
 
 把海尔空调接入 Home Assistant 时绕不开一个坑：**`refresh_token` 抓不到**。
