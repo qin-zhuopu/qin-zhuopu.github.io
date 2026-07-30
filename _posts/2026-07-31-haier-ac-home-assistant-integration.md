@@ -11,6 +11,8 @@ categories: 折腾
 
 > 适合读者：会基本的命令行操作，愿意读 Python 代码，对 HA 集成开发有兴趣的人。
 
+> 本文是「海尔空调接入 HA」系列的概览。深入的话题另写了几篇独立文章，链接见文末。
+
 ## TL;DR
 
 - 海尔智家国内云用 OAuth + WebSocket 推送，标准登录需要 `refresh_token`
@@ -334,6 +336,16 @@ _LOGGER.debug('polling device %s got %d attrs: %s', device.id, len(values), valu
 - [Home Assistant 开发文档](https://developers.home-assistant.io/)
 - [whistle 抓包工具](https://wproxy.org/whistle/)
 - [Reqable（推荐替代 whistle）](https://reqable.com/)
+
+## 系列文章
+
+本文是总览，下面几个深入话题单独写了：
+
+- [海尔智家云的两套 token，以及为什么手机抓不到 refresh_token](/2026/07/31/haier-oauth-token-explained.html) — 认证体系深挖
+- [给 Home Assistant 集成加定时任务踩的三个 asyncio 坑](/2026/07/31/home-assistant-asyncio-pitfalls.html) — 三个坑的完整分析
+- [Home Assistant 的两个存储：数据库只记变化，日志每次都记](/2026/07/31/home-assistant-recorder-vs-log.html) — 排查"polling 没生效"的方法
+- [Home Assistant 实体的「数据库行数」≠「事件次数」](/2026/07/31/home-assistant-websocket-push-analysis.html) — WS 推送频率分析
+- [同一个设备两套名字：海尔 WS 实体名 vs Polled 实体名不一致](/2026/07/31/haier-entity-name-mismatch.html) — 实体命名踩坑
 
 ---
 
