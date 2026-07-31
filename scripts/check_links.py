@@ -243,6 +243,157 @@ def check_external(url):
 
 
 # ---------------------------------------------------------------------------
+# 线上模式：爬取已部署站点，校验真实 HTML 里的链接
+# ---------------------------------------------------------------------------
+
+HREF_RE = re.compile(r'''href=["']([^"']+)["']''', re.IGNORECASE)
+
+
+def _make_opener():
+    handlers = [urllib.request.HTTPSHandler(context=_no_verify_ssl_ctx())]
+    if PROXY:
+        handlers.append(urllib.request.ProxyHandler({
+            "http": PROXY, "https": PROXY,
+        }))
+    return urllib.request.build_opener(*handlers)
+
+
+def _no_verify_ssl_ctx():
+    ctx = ssl.create_default_context()
+    ctx.check_hostname = False
+    ctx.verify_mode = ssl.CERT_NONE
+    return ctx
+
+
+def fetch_url(opener, url):
+    """GET 一个 URL，返回 (status, body_text_or_None)。status 为 None 表示请求失败。"""
+    req = urllib.request.Request(url, headers={"User-Agent": USER_AGENT, "Accept": "*/*"})
+    try:
+        with opener.open(req, timeout=HTTP_TIMEOUT) as resp:
+            body = resp.read().decode("utf-8", "replace")
+            return resp.status, body
+    except urllib.error.HTTPError as e:
+        return e.code, None
+    except (urllib.error.URLError, socket.timeout, http.client.HTTPException,
+            ConnectionError, ssl.SSLError, ValueError) as e:
+        return None, None
+
+
+def run_live_check(args):
+    site = args.live.rstrip("/") + "/"
+    site_host = urllib.parse.urlparse(site).netloc
+    opener = _make_opener()
+
+    print("=" * 70)
+    print("线上站点链接检查  site=%s" % site)
+    if PROXY:
+        print("  走代理：%s" % PROXY)
+    print("=" * 70)
+
+    # 1) BFS 爬取站内所有页面
+    visited = {}            # url -> status
+    pages_with_links = {}   # url -> set(of href urls found on that page)
+    queue = [site]
+    while queue:
+        url = queue.pop(0)
+        if url in visited:
+            continue
+        status, body = fetch_url(opener, url)
+        visited[url] = status
+        if status != 200 or body is None:
+            continue
+        hrefs = set()
+        for raw in HREF_RE.findall(body):
+            href = raw.split("#")[0].strip()
+            if not href:
+                continue
+            full = urllib.parse.urljoin(url, href)
+            full = urllib.parse.urlparse(full)._replace(fragment="").geturl()
+            hrefs.add(full)
+            # 同 host 且像 HTML 的，加入待爬队列
+            p = urllib.parse.urlparse(full)
+            if p.netloc == site_host and p.scheme in ("http", "https"):
+                if not any(full.endswith(ext) for ext in
+                           (".css", ".js", ".png", ".jpg", ".jpeg", ".svg",
+                            ".gif", ".ico", ".xml", ".json", ".webp", ".woff", ".woff2")):
+                    if full not in visited:
+                        queue.append(full)
+        pages_with_links[url] = hrefs
+
+    # 2) 汇总所有出链，分类校验
+    dead = []
+    external_seen = {}   # url -> (ok, detail)，避免重复请求同一外链
+    internal_status = {}  # url -> status（已爬的站内页）
+    external_checked = 0
+    external_skipped = 0
+    all_outlinks = set()
+
+    for page, hrefs in pages_with_links.items():
+        for href in hrefs:
+            all_outlinks.add(href)
+            p = urllib.parse.urlparse(href)
+            same_site = (p.netloc == site_host)
+
+            if same_site:
+                # 站内：用已爬到的状态
+                st = visited.get(href)
+                if st is None:
+                    # 没单独爬过（比如只被引用、本身是文件资源），补一次
+                    st, _ = fetch_url(opener, href)
+                    visited[href] = st
+                if st is None or st >= 400:
+                    dead.append((page, href, "internal", "HTTP %s" % (st if st is not None else "请求失败")))
+                continue
+
+            # 外链
+            if href.startswith("mailto:") or href.startswith("javascript:"):
+                continue
+            if is_placeholder_external(href):
+                external_skipped += 1
+                continue
+            host = (p.hostname or "").lower()
+            if any(host == h or host.endswith("." + h) for h in args.skip_host):
+                external_skipped += 1
+                continue
+            if href in external_seen:
+                continue
+            ok, detail = check_external(href)
+            external_seen[href] = (ok, detail)
+            external_checked += 1
+            if not ok:
+                dead.append((page, href, "external", detail))
+
+    # 3) 输出
+    print()
+    print("爬取站内页面：%d（其中 200：%d）"
+          % (len(visited), sum(1 for s in visited.values() if s == 200)))
+    print("站内 4xx/5xx/失败 页面：%d"
+          % sum(1 for s in visited.values() if s is None or (s and s >= 400)))
+    print("外链已检查：%d，跳过占位/示例/skip-host：%d"
+          % (external_checked, external_skipped))
+    print()
+
+    bad_pages = sorted(u for u, s in visited.items() if s is None or (s and s >= 400))
+    if bad_pages:
+        print("==== 站内打不开的页面 ====")
+        for u in bad_pages:
+            print("  [%s] %s" % (visited.get(u), u))
+        print()
+
+    if dead:
+        print("==== 发现 %d 个死链（来源页 -> 死链）====" % len(dead))
+        for page, href, kind, reason in sorted(set(dead)):
+            short_page = urllib.parse.urlparse(page).path or "/"
+            print("  [%s] %s  ->  %s" % (reason, short_page, href))
+        print()
+        print("❌ 共 %d 个死链" % len(dead))
+        sys.exit(1)
+    else:
+        print("✅ 线上站点没有发现死链")
+        sys.exit(0)
+
+
+# ---------------------------------------------------------------------------
 # 主流程
 # ---------------------------------------------------------------------------
 
@@ -268,18 +419,25 @@ def iter_markdown_files(root):
 
 def main():
     ap = argparse.ArgumentParser(description="检查 Jekyll 博客死链接")
-    ap.add_argument("--root", default=DEFAULT_ROOT, help="仓库根目录")
+    ap.add_argument("--root", default=DEFAULT_ROOT, help="仓库根目录（源文件模式）")
     ap.add_argument("--no-net", action="store_true", help="不检查外链，只校验站内链接")
     ap.add_argument("--proxy", default=None,
                     help="外链请求走指定代理，如 http://localhost:8080")
     ap.add_argument("--skip-host", action="append", default=[],
                     help="跳过指定 host 的外链检查（可多次指定），"
                          "如 --skip-host github.com 适合直连被墙的环境")
+    ap.add_argument("--live", default=None, metavar="SITE_URL",
+                    help="线上模式：爬取已部署站点（如 https://qin-zhuopu.github.io），"
+                         "校验真实 HTML 里的所有 <a href>。能发现源文件模式查不到的问题"
+                         "（如 Jekyll future 文章 404、permalink 时区漂移）")
     args = ap.parse_args()
 
     if args.proxy:
         global PROXY
         PROXY = args.proxy
+
+    if args.live:
+        return run_live_check(args)
 
     root = os.path.abspath(args.root)
     posts_dir = os.path.join(root, "_posts")
