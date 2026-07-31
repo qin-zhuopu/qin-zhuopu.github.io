@@ -119,7 +119,7 @@ if not cfg.refresh_token:
     raise HaierClientException('access_token 已失效且未配置 refresh_token，无法自动刷新')
 ```
 
-这套改完，集成可以正常加载，空调也能控制了。改动已经推到我的 fork：[`qin-zhuopu/haier@feat/access-token-direct`](https://github.com/qin-zhuopu/haier/tree/feat/access-token-direct)。
+这套改完，集成可以正常加载，空调也能控制了。改动已经推到我的 fork：[`qin-zhuopu/haier@85f2fb2`](https://github.com/qin-zhuopu/haier/commit/85f2fb283a439f7694efedfbba28b8d6fd7254b2)。
 
 ## 六、新问题：关机时拿不到室温
 
@@ -333,7 +333,7 @@ _LOGGER.debug('polling device %s got %d attrs: %s', device.id, len(values), valu
 ## 十一、参考资料
 
 - [banto6/haier 主仓库](https://github.com/banto6/haier)
-- [我的 fork（含本次改动）](https://github.com/qin-zhuopu/haier/tree/feat/access-token-direct)
+- [我的 fork（含本次改动）](https://github.com/qin-zhuopu/haier/commit/85f2fb283a439f7694efedfbba28b8d6fd7254b2)
 - [Home Assistant 开发文档](https://developers.home-assistant.io/)
 - [whistle 抓包工具](https://wproxy.org/whistle/)
 - [Reqable（推荐替代 whistle）](https://reqable.com/)
@@ -342,11 +342,11 @@ _LOGGER.debug('polling device %s got %d attrs: %s', device.id, len(values), valu
 
 本文是总览，下面几个深入话题单独写了：
 
-- [海尔智家云的两套 token，以及为什么手机抓不到 refresh_token](/2026/07/31/haier-oauth-token-explained.html) — 认证体系深挖
-- [给 Home Assistant 集成加定时任务踩的三个 asyncio 坑](/2026/07/31/home-assistant-asyncio-pitfalls.html) — 三个坑的完整分析
-- [Home Assistant 的两个存储：数据库只记变化，日志每次都记](/2026/07/31/home-assistant-recorder-vs-log.html) — 排查"polling 没生效"的方法
-- [Home Assistant 实体的「数据库行数」≠「事件次数」](/2026/07/31/home-assistant-websocket-push-analysis.html) — WS 推送频率分析
-- [同一个设备两套名字：海尔 WS 实体名 vs Polled 实体名不一致](/2026/07/31/haier-entity-name-mismatch.html) — 实体命名踩坑
+- [海尔智家云的两套 token，以及为什么手机抓不到 refresh_token](/2026/07/31/haier-oauth-token-explained/) — 认证体系深挖
+- [给 Home Assistant 集成加定时任务踩的三个 asyncio 坑](/2026/07/31/home-assistant-asyncio-pitfalls/) — 三个坑的完整分析
+- [Home Assistant 的两个存储：数据库只记变化，日志每次都记](/2026/07/31/home-assistant-recorder-vs-log/) — 排查"polling 没生效"的方法
+- [Home Assistant 实体的「数据库行数」≠「事件次数」](/2026/07/31/home-assistant-websocket-push-analysis/) — WS 推送频率分析
+- [同一个设备两套名字：海尔 WS 实体名 vs Polled 实体名不一致](/2026/07/31/haier-entity-name-mismatch/) — 实体命名踩坑
 
 ---
 

@@ -168,7 +168,7 @@ if not cfg.refresh_token:
     raise HaierClientException('access_token 已失效且未配置 refresh_token，无法自动刷新')
 ```
 
-这套改动推到了我的 fork：[`qin-zhuopu/haier@feat/access-token-direct`](https://github.com/qin-zhuopu/haier/tree/feat/access-token-direct)。
+这套改动推到了我的 fork：[`qin-zhuopu/haier@85f2fb2`](https://github.com/qin-zhuopu/haier/commit/85f2fb283a439f7694efedfbba28b8d6fd7254b2)。
 
 ## 五、什么时候还是要 refresh_token
 
@@ -205,7 +205,7 @@ if not cfg.refresh_token:
 ## 参考
 
 - [banto6/haier 主仓库](https://github.com/banto6/haier)
-- [我的 fork（含 access_token 直填改动）](https://github.com/qin-zhuopu/haier/tree/feat/access-token-direct)
+- [我的 fork（含 access_token 直填改动）](https://github.com/qin-zhuopu/haier/commit/85f2fb283a439f7694efedfbba28b8d6fd7254b2)
 - [Reqable 抓包工具](https://reqable.com/)
 - [whistle 抓包工具](https://wproxy.org/whistle/)
 - 微信 mmtls 协议分析（搜 "wechat mmtls" 能找到一些研究文章）
