@@ -26,6 +26,7 @@ categories: 随笔
 - [Home Assistant 的两个存储：数据库只记变化，日志每次都记](/2026/07/31/home-assistant-recorder-vs-log/)
 - [Home Assistant 实体的「数据库行数」≠「事件次数」](/2026/07/31/home-assistant-websocket-push-analysis/)
 - [同一个设备两套名字：海尔 WS 实体名 vs Polled 实体名不一致](/2026/07/31/haier-entity-name-mismatch/)
+- [Home Assistant 在 macOS 上 CPU 100%：三次抓栈定位到 c-ares](/2026/07/31/home-assistant-cpu-100-triage/)
 
 ### macOS · Big Sur 折腾系列
 
