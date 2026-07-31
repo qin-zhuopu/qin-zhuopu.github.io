@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "海尔智家云的两套 token，以及为什么手机抓不到 refresh_token"
-date: 2026-07-31 11:30:00 +0800
+date: 2026-07-31 08:40:00 +0800
 categories: Home-Assistant
 series: haier-series
 ---

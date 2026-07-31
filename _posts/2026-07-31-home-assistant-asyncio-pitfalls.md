@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "给 Home Assistant 集成加定时任务踩的三个 asyncio 坑"
-date: 2026-07-31 10:00:00 +0800
+date: 2026-07-31 08:25:00 +0800
 categories: Home-Assistant
 series: haier-series
 ---

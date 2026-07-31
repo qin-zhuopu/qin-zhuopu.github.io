@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "同一个设备两套名字：海尔空调 WS 实体名 vs Polled 实体名不一致的问题"
-date: 2026-07-31 12:00:00 +0800
+date: 2026-07-31 08:45:00 +0800
 categories: Home-Assistant
 series: haier-series
 ---

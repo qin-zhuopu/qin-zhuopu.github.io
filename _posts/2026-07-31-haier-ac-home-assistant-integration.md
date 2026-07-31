@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "把海尔空调接入 Home Assistant：抓 token、读源码、加轮询的完整折腾记录"
-date: 2026-07-31 09:00:00 +0800
+date: 2026-07-31 08:15:00 +0800
 categories: Home-Assistant
 series: haier-series
 ---

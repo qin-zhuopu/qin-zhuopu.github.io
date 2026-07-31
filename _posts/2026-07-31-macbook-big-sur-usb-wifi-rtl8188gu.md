@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "在 macOS Big Sur 上给 RTL8188GU USB 网卡装驱动：一次完整的折腾记录"
-date: 2026-07-31 06:30:00 +0800
+date: 2026-07-31 08:00:00 +0800
 categories: macOS
 series: big-sur-series
 ---

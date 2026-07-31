@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Home Assistant 的两个存储：数据库只记变化，日志每次都记"
-date: 2026-07-31 10:30:00 +0800
+date: 2026-07-31 08:30:00 +0800
 categories: Home-Assistant
 series: haier-series
 ---

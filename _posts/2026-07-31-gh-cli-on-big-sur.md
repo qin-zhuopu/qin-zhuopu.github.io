@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "GitHub CLI 在 macOS Big Sur 上装不了？装个旧版本就行"
-date: 2026-07-31 07:30:00 +0800
+date: 2026-07-31 08:10:00 +0800
 categories: 工具
 series: big-sur-series
 ---

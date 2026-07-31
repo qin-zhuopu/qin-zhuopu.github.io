@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "macOS Big Sur 的 User-Approved Kernel Extensions：装第三方 kext 必须经的流程"
-date: 2026-07-31 07:00:00 +0800
+date: 2026-07-31 08:05:00 +0800
 categories: macOS
 series: big-sur-series
 ---

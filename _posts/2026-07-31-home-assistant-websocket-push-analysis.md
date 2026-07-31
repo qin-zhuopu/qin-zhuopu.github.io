@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Home Assistant 实体的「数据库行数」≠「事件次数」：以海尔 WebSocket 为例"
-date: 2026-07-31 11:00:00 +0800
+date: 2026-07-31 08:35:00 +0800
 categories: Home-Assistant
 series: haier-series
 ---
