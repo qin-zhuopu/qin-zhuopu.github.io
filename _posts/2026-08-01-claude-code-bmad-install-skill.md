@@ -37,7 +37,7 @@ cp skills/bmad-install/SKILL.md ~/.claude/skills/bmad-install-install/
 
 | 配置项 | 示例值 | 说明 |
 |--------|--------|------|
-| `proxy_env` | `http://172.24.0.5:3128` | 代理 URL（无代理留空） |
+| `proxy_env` | `http://your-proxy:port` | 代理 URL（无代理留空；若项目根有 `.env.local`，可读其中的 `HTTP_PROXY`） |
 | `tools` | `claude-code` | 目标工具（claude-code / codex / copilot） |
 | `modules` | `core,bmm,bmad-loop,tea,bmb` | 模块列表 |
 | `bmad_loop_branch_mode` | `none` | 分支隔离（none / worktree） |

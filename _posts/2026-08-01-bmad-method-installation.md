@@ -17,16 +17,20 @@ BMAD（**B**uild **M**ore, **A**rchitect **D**reams）是一个开源的 AI-Nati
 
 ## 网络代理配置
 
-当前环境访问外部网络需通过代理：
+当前环境访问外部网络需通过代理。代理地址写在本机一个**不进 git** 的 dotenv 文件里（项目根的 `.env.local`，键名 `HTTP_PROXY`），这样换机器/换网络时只改本地文件、博客和脚本里永远不出现真实 IP：
 
 ```bash
-export http_proxy=http://172.24.0.5:3128
-export https_proxy=http://172.24.0.5:3128
-export HTTP_PROXY=http://172.24.0.5:3128
-export HTTPS_PROXY=http://172.24.0.5:3128
+# .env.local（自己创建，不进 git；模板见 .env.local.example）
+HTTP_PROXY=http://192.0.2.10:3128     # 替换成你的真实代理地址
+
+# 安装 bmad 前先 source 一下，让 npx 能拿到代理
+source .env.local
+export http_proxy="$HTTP_PROXY" https_proxy="$HTTP_PROXY" \
+       HTTP_PROXY="$HTTP_PROXY" HTTPS_PROXY="$HTTP_PROXY"
 ```
 
 > **踩坑**: 首次安装时因未配置代理，连 GitHub 超时卡死 133 秒后失败。`bmad-method install` 不自动读取系统代理，必须在执行前手动 export。
+> **再次踩坑**: 早期版本的博客把代理 IP 直接写进文章里——换网络就失效，还泄露了内网地址。改为 `.env.local` 后这两个问题都解决了。
 
 ## 安装步骤
 

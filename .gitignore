@@ -12,3 +12,7 @@ Gemfile.lock
 Thumbs.db
 *.swp
 .vscode/
+
+# 本机环境值（代理地址等），不进 git
+.env.local
+.env.*.local

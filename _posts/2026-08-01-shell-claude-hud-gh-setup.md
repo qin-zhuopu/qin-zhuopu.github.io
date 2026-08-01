@@ -153,10 +153,11 @@ gh --version
 # gh version 2.45.0
 ```
 
-登录。这台环境没有浏览器，走 Personal Access Token（PAT）：
+登录。这台环境没有浏览器，走 Personal Access Token（PAT）。代理地址我从项目根 `.env.local` 的 `HTTP_PROXY` 读（不写死，换网络只改那个文件）：
 
 ```bash
-export https_proxy=http://172.24.0.5:3128
+source .env.local
+export https_proxy="$HTTP_PROXY"
 echo "ghp_xxxxx" | gh auth login --with-token
 ```
 

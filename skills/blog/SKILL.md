@@ -64,6 +64,7 @@ description: >
 | **具体绝对路径** | `/home/alice/repo/...`、`/Users/bob/workspace/...` | `project-root/` 或 `~/workspace/` |
 | **个人用户名** | `alice`、`bob_qin` | `我` 或删除 |
 | **IP 地址** | `192.168.0.5`、`172.24.0.5` | `127.0.0.1`、`192.0.2.x`（RFC 5737 测试网）或泛化 `代理服务器` |
+| **本地配置文件里的值** | `.env.local` 的 `HTTP_PROXY=http://172.24.0.5:3128`、`~/.config/bmad/install.yaml` 的 `proxy_env`、`~/.config/blog/blog.yaml` 的 `repo` | 只写"从 X 文件的 Y 键读"，**不贴真实值** |
 | **Token / 密钥** | `ghp_xxx`、`sk-xxx` | `[REDACTED]` |
 | **内部域名** | `litellm.internal.example.com` | `my-llm-gateway.example.com` 或 `内部网关` |
 | **私有仓库 URL** | `github.com/my-org/secret-repo` | `github.com/owner/private-repo` |

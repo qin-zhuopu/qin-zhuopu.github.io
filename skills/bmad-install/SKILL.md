@@ -29,7 +29,7 @@ BMAD 安装行为存于用户主目录，与项目无关：
 ```
 
 **首次调用**若文件不存在，询问并创建：
-- `proxy_env` — 代理 URL（例：`http://172.24.0.5:3128`，空则不设代理）
+- `proxy_env` — 代理 URL（例：`http://your-proxy:port`，空则不设代理。若项目根有 `.env.local` 里的 `HTTP_PROXY`，可读它，避免硬编码）
 - `tools` — 目标工具（默认 `claude-code`，可选 `codex`、`copilot`）
 - `modules` — 模块列表（默认 `core,bmm,bmad-loop,tea,bmb`）
 - `bmad_loop_branch_mode` — 分支隔离模式（`none` 或 `worktree`，默认 `none`）

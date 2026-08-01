@@ -24,11 +24,11 @@ Claude 在处理下面的请求时，可以基于这段上下文来模拟分析�
 Claude: 什么报错？
 用户: 我跑 npx bmad-method install 的时候超时了，连了 133 秒然后失败
 Claude: 你的网络环境是怎样的？
-用户: 我在公司内网，出口走 172.24.0.5:3128 代理
+用户: 我在公司内网，出口走 192.0.2.10:3128 代理
 Claude: 试试先 export 代理再运行
 用户: 可以了！加了代理就装上了
 Claude: 具体命令？
-用户: export http_proxy=http://172.24.0.5:3128 && npx bmad-method install -y ...
+用户: export http_proxy=http://192.0.2.10:3128 && npx bmad-method install -y ...
 Claude: 用的是 --modules core,bmm,bmad-loop,tea,bmb
 Claude: 我们这是 codepilot-web 项目，NestJS + Vite React
 Claude: 装完后 bmad-loop validate 有个问题，_bmad/core/module-help.csv 这些文件被加密了，头有 TSD-Header
