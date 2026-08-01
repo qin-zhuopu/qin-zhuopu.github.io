@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Claude Code blog-pitfall 技能：让 AI 自动帮你写踩坑博客"
+title: "Claude Code blog 技能：让 AI 自动帮你写踩坑博客"
 date: 2026-08-01 07:00:00 +0800
 categories: [ai, workflow]
 tags: [claude-code, blog, automation, ai-agents]
@@ -23,13 +23,13 @@ tags: [claude-code, blog, automation, ai-agents]
 
 ```bash
 # 创建技能目录
-mkdir -p ~/.claude/skills/blog-pitfall
+mkdir -p ~/.claude/skills/blog
 
 # 复制 SKILL.md（从博客仓库或本仓库克隆）
-cp skills/blog-pitfall/SKILL.md ~/.claude/skills/blog-pitfall/
+cp skills/blog/SKILL.md ~/.claude/skills/blog/
 ```
 
-> 技能文件在博客仓库的 [`skills/blog-pitfall/SKILL.md`](https://github.com/qin-zhuopu/qin-zhuopu.github.io/blob/main/skills/blog-pitfall/SKILL.md)。
+> 技能文件在博客仓库的 [`skills/blog/SKILL.md`](https://github.com/qin-zhuopu/qin-zhuopu.github.io/blob/main/skills/blog/SKILL.md)。
 
 ### 2. 安装 gh CLI（如未安装）
 
@@ -48,7 +48,7 @@ gh auth login
 
 在任意项目的 Claude 对话中，说出触发词：
 
-> "这个坑记下来发博客"
+> "这个记下来发博客"
 
 首次调用时，技能会检测到缺少配置，询问以下信息：
 
@@ -59,7 +59,7 @@ gh auth login
 | `branch` | `main` | 目标分支 |
 | `posts_dir` | `_posts` | 文章目录（Hexo 用 `source/_posts`）|
 
-配置保存到 `~/.config/blog-pitfall/blog.yaml`，后续所有项目共用，不再询问。
+配置保存到 `~/.config/blog/blog.yaml`，后续所有项目共用，不再询问。
 
 ## 使用方法
 
@@ -68,9 +68,9 @@ gh auth login
 以下任意说法都能触发技能：
 
 - "刚才的记下来发博客"
-- "这个坑写出来"
+- "这个写出来"
 - "脱敏后发布"
-- "blog this pitfall"
+- "blog this"
 - "record this"
 - "值得记录"
 
@@ -78,7 +78,7 @@ gh auth login
 
 触发后 Claude 会自动执行：
 
-1. **读取配置**：从 `~/.config/blog-pitfall/blog.yaml` 加载博客 repo 和路径
+1. **读取配置**：从 `~/.config/blog/blog.yaml` 加载博客 repo 和路径
 2. **分析对话**：提取问题现象、排查过程、根因、解决方案
 3. **脱敏处理**：替换项目名、路径、IP、token 等敏感信息
 4. **生成文章**：按 Jekyll Markdown 格式写入文件
@@ -99,7 +99,7 @@ Claude 会生成类似这样的文章：
 layout: post
 title: "代理环境下 npx 安装超时排查"
 date: 2026-08-01 07:00:00 +0800
-categories: [技术踩坑]
+categories: [技术笔记]
 tags: [proxy, npm, npx, timeout]
 ---
 
@@ -149,6 +149,6 @@ npx bmad-method install -y ...
 
 ## 参考
 
-- [blog-pitfall Skill 源码](https://github.com/qin-zhuopu/qin-zhuopu.github.io/blob/main/skills/blog-pitfall/SKILL.md)
+- [blog Skill 源码](https://github.com/qin-zhuopu/qin-zhuopu.github.io/blob/main/skills/blog/SKILL.md)
 - [Claude Code 技能文档](https://docs.anthropic.com/en/docs/claude-code/skills)
 - [Jekyll 文章格式](https://jekyllrb.com/docs/posts/)

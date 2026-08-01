@@ -1,14 +1,14 @@
 ---
-name: blog-pitfall
+name: blog
 description: >
   将当前会话中发现的技术踩坑、调试经验或安装备忘，脱敏后发布到博客。
   触发词："记下来" "写成博客" "发到博客" "这个坑" "经验教训" "踩坑记录"
-  "脱敏后发布" "值得记录" "写篇博客" "blog this" "record this pitfall"
+  "脱敏后发布" "值得记录" "写篇博客" "blog this" "record this"
   "值得发博客" "把刚才的记录下来" "刚才的坑记下来" "写成文章" "记一下"。
   遇到环境配置错误、版本冲突、奇怪的行为、工具使用技巧时也触发。
 ---
 
-# 博客踩坑记录技能
+# 博客记录技能
 
 将对话中的技术经验转化为脱敏的博客文章，发布到用户的 Jekyll/Hexo 博客。
 
@@ -17,7 +17,7 @@ description: >
 博客配置存于用户主目录，与任何项目无关：
 
 ```
-~/.config/blog-pitfall/blog.yaml      # 创建后不再询问
+~/.config/blog/blog.yaml      # 创建后不再询问
 ```
 
 **首次调用**若文件不存在，询问并创建：
@@ -33,7 +33,7 @@ description: >
 
 ### 1. 读取/创建配置
 
-检查 `~/.config/blog-pitfall/blog.yaml` 是否存在。不存在时：
+检查 `~/.config/blog/blog.yaml` 是否存在。不存在时：
 
 1. 询问 `repo`（owner/name 格式）
 2. 询问 `local_dir`（绝对路径，支持 `~` 展开）
@@ -94,7 +94,7 @@ description: >
 layout: post
 title: "标题"
 date: YYYY-MM-DD HH:MM:SS +0800
-categories: [技术踩坑]
+categories: [技术笔记]
 tags: [tag1, tag2, tag3]
 ---
 

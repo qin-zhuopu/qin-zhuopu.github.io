@@ -6,12 +6,12 @@
 
 ## Claude Code 技能
 
-本仓库同时托管一个自定义 Claude Code 技能 `blog-pitfall`，用于将对话中的技术踩坑经验**自动脱敏**后发布到博客。详见：
+本仓库同时托管一个自定义 Claude Code 技能 `blog`，用于将对话中的技术踩坑经验**自动脱敏**后发布到博客。详见：
 
-- **Skill 源码**：[`skills/blog-pitfall/SKILL.md`](skills/blog-pitfall/SKILL.md)
-- **安装使用说明**：[Claude Code blog-pitfall 技能安装使用指南](https://qin-zhuopu.github.io/2026/08/01/claude-code-blog-pitfall-skill/)（博客文章）
+- **Skill 源码**：[`skills/blog/SKILL.md`](skills/blog/SKILL.md)
+- **安装使用说明**：[Claude Code blog 技能安装使用指南](https://qin-zhuopu.github.io/2026/08/01/claude-code-blog-skill/)（博客文章）
 
-触发词：`记下来`、`写到博客`、`踩坑记录`、`blog this`、`record this pitfall` 等。
+触发词：`记下来`、`写到博客`、`踩坑记录`、`blog this`、`record this` 等。
 
 ## 首次克隆后的配置
 

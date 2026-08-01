@@ -1,4 +1,4 @@
-# blog-pitfall 手动测试
+# blog 手动测试
 
 ## 测试目标
 验证 skill 能否正确：
