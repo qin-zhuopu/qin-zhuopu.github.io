@@ -1,5 +1,5 @@
 ---
-name: bmad
+name: bmad-install
 description: >
   在当前项目中安装、重装或更新 BMAD Method AI 开发框架（core + bmm + loop + tea + bmb）。
   触发词："安装 bmad" "重装 bmad" "setup bmad" "bmad update" "bmad init"

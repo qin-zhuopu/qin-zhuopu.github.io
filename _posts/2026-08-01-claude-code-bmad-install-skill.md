@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Claude Code bmad 技能：一键自动化安装 BMAD Method"
+title: "Claude Code bmad-install 技能：一键自动化安装 BMAD Method"
 date: 2026-08-01 08:00:00 +0800
 categories: [ai, workflow]
 tags: [claude-code, bmad, automation, ai-agents]
@@ -21,11 +21,11 @@ BMAD Method 是 AI-Native 的开发框架，有 5 个模块（Core、BMM、Loop�
 ### 1. 复制技能到 Claude Code 技能目录
 
 ```bash
-mkdir -p ~/.claude/skills/bmad
-cp skills/bmad/SKILL.md ~/.claude/skills/bmad/
+mkdir -p ~/.claude/skills/bmad-install
+cp skills/bmad-install/SKILL.md ~/.claude/skills/bmad-install-install/
 ```
 
-> 技能文件在博客仓库的 [`skills/bmad/SKILL.md`](https://github.com/qin-zhuopu/qin-zhuopu.github.io/blob/main/skills/bmad/SKILL.md)。
+> 技能文件在博客仓库的 [`skills/bmad-install/SKILL.md`](https://github.com/qin-zhuopu/qin-zhuopu.github.io/blob/main/skills/bmad-install/SKILL.md)。
 
 ### 2. 首次使用：配置安装行为
 
@@ -157,7 +157,7 @@ project-root/
 
 ## 参考
 
-- [bmad Skill 源码](https://github.com/qin-zhuopu/qin-zhuopu.github.io/blob/main/skills/bmad/SKILL.md)
+- [bmad Skill 源码](https://github.com/qin-zhuopu/qin-zhuopu.github.io/blob/main/skills/bmad-install/SKILL.md)
 - [BMAD Method GitHub](https://github.com/bmad-code-org/BMAD-METHOD/)
 - [BMAD Loop Repository](https://github.com/bmad-code-org/bmad-loop)
 - [Claude Code 技能文档](https://docs.anthropic.com/en/docs/claude-code/skills)
