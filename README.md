@@ -4,6 +4,40 @@
 
 线上地址：https://qin-zhuopu.github.io
 
+## 首次克隆后的配置
+
+本仓库用「仓库内 hooks」做推送前检查。clone 后需手动激活 hooks：
+
+```bash
+./scripts/setup-hooks.sh
+```
+
+或直接：
+
+```bash
+git config core.hooksPath .githooks
+```
+
+> **注意**：`.githooks` 目录随仓库同步，但 `core.hooksPath` 配置不会自动生效（Git 安全机制），所以 clone 后必须手动执行上面的命令一次。
+
+### 提交前检查（pre-commit）
+
+ TODO：[可选] 格式化 front matter、lint markdown
+
+### 推送前检查（pre-push）
+
+推送前自动跑死链脚本，只检查**站内链接**（不依赖外网）：
+
+```bash
+python scripts/check_links.py --no-net
+```
+
+如果检测到死链，推送会被阻止。修复后重试，或紧急情况下加 `--no-verify` 跳过：
+
+```bash
+git push --no-verify   # 不推荐，除非你知道自己在做什么
+```
+
 ## 写新文章
 
 在 `_posts/` 下新建文件，命名格式 `YYYY-MM-DD-标题.md`，开头加 front matter：
