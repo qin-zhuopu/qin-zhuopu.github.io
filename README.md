@@ -6,12 +6,15 @@
 
 ## Claude Code 技能
 
-本仓库同时托管一个自定义 Claude Code 技能 `blog`，用于将对话中的技术踩坑经验**自动脱敏**后发布到博客。详见：
+本仓库托管自定义 Claude Code 技能，用于 AI 辅助开发 workflow：
 
-- **Skill 源码**：[`skills/blog/SKILL.md`](skills/blog/SKILL.md)
-- **安装使用说明**：[Claude Code blog 技能安装使用指南](https://qin-zhuopu.github.io/2026/08/01/claude-code-blog-skill/)（博客文章）
+| 技能 | 作用 | 触发词 |
+|------|------|--------|
+| `blog` | 对话经验脱敏后发布博客 | `记下来`、`发博客`、`blog this` |
+| `bmad` | 一键安装/重装 BMAD Method 框架 | `安装 bmad`、`bmad init`、`重装 bmad` |
 
-触发词：`记下来`、`写到博客`、`踩坑记录`、`blog this`、`record this` 等。
+- **blog Skill 源码**：[`skills/blog/SKILL.md`](skills/blog/SKILL.md) / [安装使用指南](https://qin-zhuopu.github.io/2026/08/01/claude-code-blog-skill/)
+- **bmad Skill 源码**：[`skills/bmad/SKILL.md`](skills/bmad/SKILL.md) / [安装使用指南](https://qin-zhuopu.github.io/2026/08/01/claude-code-bmad-skill/)
 
 ## 首次克隆后的配置
 
