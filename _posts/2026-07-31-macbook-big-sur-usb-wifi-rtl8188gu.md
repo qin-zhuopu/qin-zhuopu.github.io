@@ -28,7 +28,7 @@ BuildVersion:   20G1427
     Product ID: 0xb711
     Vendor ID:  0x0bda  (Realtek Semiconductor Corp.)
     Version:    2.00
-    Serial Number: 00E04CB82101
+    Serial Number: [serial hidden]
     Speed:      Up to 480 Mb/s
     Manufacturer: Realtek
 ```
@@ -317,9 +317,9 @@ ifconfig en5
 ```
 en5: flags=8863<UP,BROADCAST,SMART,RUNNING,SIMPLEX,MULTICAST> mtu 1500
     options=400<CHANNEL_IO>
-    ether 90:de:80:b8:64:05
+    ether [MAC hidden]
     inet6 fe80::4ee:c167:c01d:d73d%en5 prefixlen 64 secured scopeid 0xa
-    inet 192.168.1.123 netmask 0xffffff00 broadcast 192.168.1.255
+    inet 192.168.1.x netmask 0xffffff00 broadcast 192.168.1.255
     media: autoselect
     status: active
 ```
