@@ -165,35 +165,72 @@ fc-list :lang=zh | wc -l    # 确认 > 0（装完约 30 个中文字体）
 
 这是 X11 转发的本质决定的：**X11 只转发原始按键（keysym）**，中文「拼音→汉字」的组字过程是**应用侧**输入法框架（XIM / fcitx / ibus）的事。Windows 输入法组好的中文不会被塞进 X11 转发的窗口。所以**输入法必须装在应用所在的地方，也就是容器里**。
 
-装 fcitx5，但只装框架还不够——踩了第二个坑：
+装 fcitx5 + RIME（中州韵）+ 雾凇拼音词库。选 RIME 是因为：搜狗官方 Linux 版仍是 `sogoupinyin_4.2.1.145`（多年冻结、fcitx4 架构、与 fcitx5 冲突），豆包没有 Linux 版，百度 Linux 版也是老架构。**RIME + 雾凇拼音（rime-ice）是唯一现代、原生支持 fcitx5、体验对标搜狗的方案**。
 
 ```bash
-# 输入法框架 + 拼音引擎
+# 输入法框架 + RIME 引擎
 apt-get install -y --no-install-recommends \
-  fcitx5 fcitx5-chinese-addons fcitx5-config-qt dbus-x11 im-config
+  fcitx5 fcitx5-rime dbus-x11 im-config git
 
-# 关键：GTK/Qt 桥接模块。Chrome 是 GTK 应用，GTK_IM_MODULE=fcitx
+# 关键坑一：GTK/Qt 桥接模块。Chrome 是 GTK 应用，GTK_IM_MODULE=fcitx
 # 需要对应的 immodule（im-fcitx5.so）才生效，否则环境变量形同虚设
 apt-get install -y fcitx5-frontend-gtk3 fcitx5-frontend-gtk4 fcitx5-frontend-qt5
 ls /usr/lib/*/gtk-3.0/*/immodules/im-fcitx5.so   # 确认桥接文件存在
+
+# 雾凇拼音词库（66M）克隆到 RIME 用户目录
+git clone --depth 1 https://github.com/iDvel/rime-ice.git \
+  /root/.local/share/fcitx5/rime
 ```
 
-然后配 fcitx5 profile 启用拼音，带输入法环境变量启动：
+配置分三层，缺一层都不对：
 
 ```bash
+# 1) RIME 默认方案设为雾凇（default.custom.yaml）
+cat > /root/.local/share/fcitx5/rime/default.custom.yaml <<'YAML'
+patch:
+  schema_list:
+    - schema: rime_ice
+YAML
+
+# 2) fcitx5 profile 默认输入法设为 rime（DefaultIM=rime）
+
+# 3) 环境变量 + 启动
 export DISPLAY=localhost:0
 export GTK_IM_MODULE=fcitx QT_IM_MODULE=fcitx XMODIFIERS=@im=fcitx
 export XDG_RUNTIME_DIR=/tmp/runtime-root         # 缺这个 fcitx5 报 "XDG_RUNTIME_DIR is invalid"
 mkdir -p $XDG_RUNTIME_DIR && chmod 700 $XDG_RUNTIME_DIR
 eval $(dbus-launch --sh-syntax)                  # fcitx5 依赖 dbus session
-fcitx5 -d --replace                              # 先起 fcitx5
-sleep 3
-/opt/google/chrome/chrome ... &                  # 后起 Chrome（继承 IM 环境变量）
+fcitx5 -d --replace ; sleep 3                     # 先起 fcitx5，首次部署编译词库（约 58M，需十几秒）
+/opt/google/chrome/chrome ... &                   # 后起 Chrome（继承 IM 环境变量）
 ```
 
-在输入框里按 **Ctrl+Space** 切拼音，候选词窗口也经同一个 X server 显示到 Windows 桌面。
+### 坑六：一启动默认还是英文
 
-> 想装搜狗或豆包？都不行。截至写稿，搜狗官方 Linux 版仍是 `sogoupinyin_4.2.1.145`（版本号多年未变），**仍是 fcitx4 架构**，依赖 `fcitx-libs`，与 fcitx5 冲突、Ubuntu 24.04 依赖难满足；豆包输入法官网**只有 Mac / iOS，没有 Linux 版**。所以容器里就用 fcitx5 + libpinyin，想要更强词库联想加 `fcitx5-pinyin-zhwiki`（维基词库），体验接近搜狗。
+配好后能打中文了，但每次进来默认是英文，要按一次 Ctrl+Space 才切中文。想「一启动就是中文」，需要**同时**满足两层开关，缺一个都不行：
+
+```bash
+# fcitx5 层：全局 config 设 ActiveByDefault（否则默认走键盘布局=英文）
+cat > /root/.config/fcitx5/config <<'CONF'
+[Behavior]
+ActiveByDefault=True
+ShareInputState=All
+CONF
+```
+
+```yaml
+# RIME 层：rime_ice.custom.yaml 给 ascii_mode 加 reset: 0（否则 RIME 内部默认西文）
+# 把 rime_ice.schema.yaml 的 switches 段照抄过来，只在 ascii_mode 项加 reset: 0
+patch:
+  switches:
+    - name: ascii_mode
+      states: [ 中, Ａ ]
+      reset: 0
+    # ... 其余 switch 项照抄
+```
+
+`ActiveByDefault` 管 fcitx5 是否激活输入法，`ascii_mode: reset: 0` 管 RIME 内部中/西文——两个是不同层的开关，只改一个都还是英文。改完重启 fcitx5 + Chrome 才生效。
+
+在输入框里直接敲拼音就是中文，候选词窗口也经同一个 X server 显示到 Windows 桌面。
 
 ## 根因分析
 
