@@ -146,16 +146,6 @@ curl -s http://127.0.0.1:9222/json           # → tab 列表（含 webSocketDeb
 
 > `innerText` 是 DOM 文本节点，和字体无关，所以数据没问题。方块是**渲染层**问题——精简容器里**根本没有中文字体**（`fc-list :lang=zh` 为空），Chrome 找不到 CJK 字形，只能画方块。
 
-## 根因分析
-
-三个坑其实是三个不同层面的误区：
-
-1. **「免安装」≠「必须有便携版下载」**：编译型 X Server 的产物天生免安装，安装器只是分发外壳，用 `/S /D=` 解压即可。
-2. **DISPLAY 的数字是 display number 不是端口**：`localhost:0` 才是端口 6000。这个错误的症状（`Missing X server`）极具误导性，让人以为是隧道不通，实际隧道好好的。
-3. **文本正常不代表显示正常**：`innerText` 正确只能证明数据链路 OK，字形渲染依赖容器内的字体文件。容器镜像为了精简通常不含中文字体。
-
-## 最终方案
-
 装中文字体，然后**重启 Chrome**（字体在进程启动时加载，运行中的 Chrome 不会感知新装字体——这一步最容易漏）：
 
 ```bash
@@ -167,12 +157,62 @@ fc-list :lang=zh | wc -l    # 确认 > 0（装完约 30 个中文字体）
 # 关键：重启 Chrome，新字体才生效
 ```
 
-重启后汉字正常显示。整条链路打通：
+重启后汉字正常显示。
+
+### 坑五：能看中文，但打不出中文
+
+窗口里汉字正常了，但想在输入框里打中文——Windows 本地输入法对这个窗口完全无效，Ctrl+Space 也切不出拼音。
+
+这是 X11 转发的本质决定的：**X11 只转发原始按键（keysym）**，中文「拼音→汉字」的组字过程是**应用侧**输入法框架（XIM / fcitx / ibus）的事。Windows 输入法组好的中文不会被塞进 X11 转发的窗口。所以**输入法必须装在应用所在的地方，也就是容器里**。
+
+装 fcitx5，但只装框架还不够——踩了第二个坑：
+
+```bash
+# 输入法框架 + 拼音引擎
+apt-get install -y --no-install-recommends \
+  fcitx5 fcitx5-chinese-addons fcitx5-config-qt dbus-x11 im-config
+
+# 关键：GTK/Qt 桥接模块。Chrome 是 GTK 应用，GTK_IM_MODULE=fcitx
+# 需要对应的 immodule（im-fcitx5.so）才生效，否则环境变量形同虚设
+apt-get install -y fcitx5-frontend-gtk3 fcitx5-frontend-gtk4 fcitx5-frontend-qt5
+ls /usr/lib/*/gtk-3.0/*/immodules/im-fcitx5.so   # 确认桥接文件存在
+```
+
+然后配 fcitx5 profile 启用拼音，带输入法环境变量启动：
+
+```bash
+export DISPLAY=localhost:0
+export GTK_IM_MODULE=fcitx QT_IM_MODULE=fcitx XMODIFIERS=@im=fcitx
+export XDG_RUNTIME_DIR=/tmp/runtime-root         # 缺这个 fcitx5 报 "XDG_RUNTIME_DIR is invalid"
+mkdir -p $XDG_RUNTIME_DIR && chmod 700 $XDG_RUNTIME_DIR
+eval $(dbus-launch --sh-syntax)                  # fcitx5 依赖 dbus session
+fcitx5 -d --replace                              # 先起 fcitx5
+sleep 3
+/opt/google/chrome/chrome ... &                  # 后起 Chrome（继承 IM 环境变量）
+```
+
+在输入框里按 **Ctrl+Space** 切拼音，候选词窗口也经同一个 X server 显示到 Windows 桌面。
+
+> 想装搜狗或豆包？都不行。截至写稿，搜狗官方 Linux 版仍是 `sogoupinyin_4.2.1.145`（版本号多年未变），**仍是 fcitx4 架构**，依赖 `fcitx-libs`，与 fcitx5 冲突、Ubuntu 24.04 依赖难满足；豆包输入法官网**只有 Mac / iOS，没有 Linux 版**。所以容器里就用 fcitx5 + libpinyin，想要更强词库联想加 `fcitx5-pinyin-zhwiki`（维基词库），体验接近搜狗。
+
+## 根因分析
+
+坑其实分布在几个不同层面：
+
+1. **「免安装」≠「必须有便携版下载」**：编译型 X Server 的产物天生免安装，安装器只是分发外壳，用 `/S /D=` 解压即可。
+2. **DISPLAY 的数字是 display number 不是端口**：`localhost:0` 才是端口 6000。这个错误的症状（`Missing X server`）极具误导性，让人以为是隧道不通，实际隧道好好的。
+3. **文本正常不代表显示正常**：`innerText` 正确只能证明数据链路 OK，字形渲染依赖容器内的字体文件。
+4. **显示和输入是两件事**：字体解决「看得到中文」，输入法解决「打得出中文」。二者都在**容器侧**（应用侧），与 Windows 本地环境无关——这是 X11 网络透明性的直接结果。
+5. **环境变量要有对应的 immodule 才生效**：`GTK_IM_MODULE=fcitx` 只是声明，真正干活的是 `fcitx5-frontend-gtk3` 提供的 `im-fcitx5.so`。
+
+## 完整链路
 
 ```
-[容器 Chrome, DISPLAY=localhost:0]
+[容器 Chrome, DISPLAY=localhost:0, GTK_IM_MODULE=fcitx]
    ├── X11 →  ssh -R 6000:localhost:6000  → [本地 VcXsrv:0] → 桌面窗口
-   └── CDP ←  ssh -L 9222:127.0.0.1:9222  ← [本地 curl/websocket]
+   ├── CDP ←  ssh -L 9222:127.0.0.1:9222  ← [本地 curl/websocket]
+   ├── 中文显示 ← fonts-noto-cjk（容器内字体）
+   └── 中文输入 ← fcitx5 + im-fcitx5.so（容器内输入法，候选词也经 X server 显示）
 ```
 
 ## 关键命令速查
