@@ -163,6 +163,7 @@ labels_cypher = ":" + ":".join([primary] + sub_labels)
 
 ### yaml_to_neo4j.py
 
+{% raw %}
 ```python
 from neo4j import GraphDatabase
 
@@ -187,6 +188,7 @@ def upsert_edge(session, edge: dict):
         SET r.updatedAt = $now
     """, **edge, now=TODAY)
 ```
+{% endraw %}
 
 跑完会输出统计：
 

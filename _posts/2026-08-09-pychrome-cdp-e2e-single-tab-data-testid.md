@@ -94,6 +94,7 @@ CDP 测试和 Selenium 类工具的根本差异：CDP 操作的是**浏览器内
 
 ### Tab 类的轻封装
 
+{% raw %}
 ```python
 class Tab:
     def __init__(self, tab):
@@ -129,6 +130,7 @@ class Tab:
         raw = self.eval(f"localStorage.getItem({json.dumps(key)})")
         return json.loads(raw) if raw else None
 ```
+{% endraw %}
 
 ### 所有 DOM 访问走 data-testid
 
