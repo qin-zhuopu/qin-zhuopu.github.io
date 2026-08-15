@@ -6,7 +6,7 @@ categories: [技术踩坑]
 tags: [STM32, Keil, CMSIS-Pack, USB, 固件分析]
 ---
 
-捡到一块跑着陌生固件的 STM32 板子，想知道这固件哪来的、有没有源码。这篇记录从 USB 取证定位固件身份，到在 Keil 官方 CMSIS-Pack 里挖出同款 demo 源码的完整过程。
+淘宝买的一块 STM32 板子，到手时跑着陌生固件，想知道这固件哪来的、有没有源码。这篇记录从 USB 取证定位固件身份，到在 Keil 官方 CMSIS-Pack 里挖出同款 demo 源码的完整过程。
 
 ## 问题现象
 
