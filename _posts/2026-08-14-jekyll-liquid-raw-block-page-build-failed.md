@@ -71,6 +71,31 @@ GitHub Pages 的构建管线是：**Liquid 渲染 → markdown 渲染 → 生成
 
 这也是为什么"某一次提交是分水岭"：那批新增文章里只要有一篇带了这类字符，从它开始之后全部构建失败；GitHub 只会告诉你 `Page build failed`，不会告诉你具体是哪个文件哪一行。
 
+## 第二个坑：构建 success 但文章没上线 —— future date 被跳过
+
+修复 `&#123;&#37; raw &#37;&#125;` 包裹之后构建恢复正常了（`errored` 变 `built`），但**又出现一个更隐蔽的情况**：Actions 显示构建 `success`、部署也 `success`，线上首页却还是没有新文章，文章页直接 **HTTP 404**。
+
+这次 `git log` / 状态 API 都看不到异常，必须**下载部署产物**或翻**构建日志**才能定位。两个关键命令：
+
+```bash
+# 下载构建产物，看里面到底有没有这篇文章
+gh run download <run-id> -R <owner>/<repo> -n github-pages -D site
+
+# 拉取 build job 日志，找针对该文章的 Jekyll 处理信息
+gh api "repos/<owner>/<repo>/actions/runs/<run-id>/jobs" \
+  --jq '.jobs[] | select(.name=="build") | .id'
+```
+
+构建日志里出现了这么一行，就是根因：
+
+```
+Skipping: _posts/2026-08-14-xxx.md has a future date
+```
+
+**原因**：Jekyll 的 `future: false` 默认不渲染"发布日期在未来"的文章。而发布日期取自 **front matter 里的 `date` 字段**，并且 **GitHub Actions 构建时刻按 UTC 计算**。如果文章的 `date` 是 `时区 +0800` 的上午甚至中午，换算成 UTC 后可能晚于构建发生的时刻，就会被当作"未来文章"整篇跳过——构建不报错，只是静默不产出。
+
+**判断/解决**：把 front matter 的 `date` 设成**早于构建时刻**的时间（用 UTC 换算确认），或用能明确早于当前的时间点。改完重新 push 即可。判断时先确认构建日志里是 `Reading` 还是 `Skipping` 这篇文章。
+
 ## 最终方案
 
 给含双花括号的代码块套上 raw 标签对，让 Liquid 跳过整块内容原样输出。raw 起始和结束标签放在 fenced code block 的 ` ``` ` 围栏**外面**：
@@ -97,10 +122,12 @@ session.run(f"""
 
 1. 抓线上首页 → 确认内容确实落后
 2. 对比 git 远端 → 确认代码没落后（排除 push 问题）
-3. 用 `gh api` 查 pages 构建状态 → 若为 `errored`，说明是构建失败
+3. 用 `gh api` 查 pages / Actions runs → 若 `errored`，说明构建失败；若 `success` 但文章没上线，进入第 6 步
 4. 定位分水岭 commit → 谁引入第一处 `errored`
 5. 在该 commit 新增文章的代码块里找会被 Liquid 误读的字符 → 用 raw 标签对包裹
-6. 重新 push → 构建状态变 `built` → 首页更新
+6. 下载部署产物 or 翻 build 日志 → 确认该 .md 是被 `Reading` 还是被 `Skipping: has a future date`
+7. front matter 的 `date` 若晚于构建时刻（UTC 判定）→ 改到早于构建时刻
+8. 重新 push → Actions `success` + 线上文章页 200 → 首页更新
 
 ## 参考
 
