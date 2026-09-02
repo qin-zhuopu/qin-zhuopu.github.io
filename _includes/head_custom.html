@@ -1,0 +1,41 @@
+<!-- Mermaid 流程图支持：kramdown 会把 ```mermaid 代码块渲染成
+     <pre><code class="language-mermaid">...</code></pre>，而 mermaid 默认只认
+     class="mermaid" 的容器。下面的脚本在 DOMContentLoaded 时把这些代码块转换成
+     mermaid 能识别的 <pre class="mermaid"> 容器，再按需从 CDN 加载并渲染。
+     页面上没有 mermaid 代码块时完全不加载 mermaid，普通文章不受任何影响。 -->
+<script>
+  (function () {
+    function initMermaid() {
+      var codeBlocks = document.querySelectorAll('pre > code.language-mermaid');
+      if (codeBlocks.length === 0) {
+        return; // 页面没有 mermaid 图，不加载任何东西
+      }
+
+      // 把 <pre><code class="language-mermaid">…</code></pre> 转成
+      // <pre class="mermaid">…</pre>，用 textContent 拿到已被 kramdown 转义还原的源码。
+      codeBlocks.forEach(function (code) {
+        var pre = code.parentNode;
+        var container = document.createElement('pre');
+        container.className = 'mermaid';
+        container.textContent = code.textContent;
+        pre.parentNode.replaceChild(container, pre);
+      });
+
+      import('https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs')
+        .then(function (mod) {
+          var mermaid = mod.default;
+          mermaid.initialize({ startOnLoad: false });
+          mermaid.run({ querySelector: 'pre.mermaid' });
+        })
+        .catch(function (err) {
+          console.error('Failed to load mermaid:', err);
+        });
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initMermaid);
+    } else {
+      initMermaid();
+    }
+  })();
+</script>
