@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "tmux attach 后命令行出现 11;rgb:... 乱码：一次从玄学到 GitHub issue 的排查"
-date: 2026-09-09 09:30:00 +0800
+date: 2026-09-09 08:30:00 +0800
 categories: 技术踩坑
 tags: [tmux, ssh, terminal, zsh, Windows]
 ---
