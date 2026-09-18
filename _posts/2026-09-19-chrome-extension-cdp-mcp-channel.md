@@ -2,6 +2,7 @@
 layout: post
 title: "Chrome 把 CDP 的门关了一半，但给 AI Agent 留了扇侧门"
 date: 2026-09-19 05:50 +0800
+permalink: /2026/09/19/chrome-extension-cdp-mcp-channel/
 categories: [AI, Agent]
 tags: [chrome, cdp, mcp, playwright, browser-automation, 踩坑]
 ---
